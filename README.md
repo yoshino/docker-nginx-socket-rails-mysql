@@ -1,0 +1,6 @@
+# README
+
+## セットアップ
+```
+$ dockercompose up
+```

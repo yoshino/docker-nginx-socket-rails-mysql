@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0.15
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql/volumes:/var/lib/mysql
+    command: mysqld --default-authentication-plugin=mysql_native_password
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    tty: true
+    stdin_open: true
+    volumes:
+      - '.:/app'
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
