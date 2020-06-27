@@ -10,7 +10,7 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | APT_KEY_DONT_WARN_ON_DAN
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
 RUN apt-get update
-RUN apt-get install -y build-essential nodejs yarn
+RUN apt-get install -y build-essential nodejs yarn default-mysql-client
 
 ENV APP_ROOT /app
 WORKDIR $APP_ROOT

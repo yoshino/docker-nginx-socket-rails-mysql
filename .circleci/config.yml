@@ -1,0 +1,38 @@
+version: 2.1
+
+executors:
+  default:
+    machine:
+      image: ubuntu-1604:201903-01
+
+jobs:
+  test:
+    executor:
+      name: default
+    steps:
+      - checkout
+      - run:
+          name: Build images
+          command: |
+            docker-compose build
+
+      - run:
+          name: Start containers
+          command: |
+            docker-compose up -d
+
+      - run:
+          name: setup database
+          command: |
+            docker-compose exec app ./db/setup
+
+      - run:
+          name: RSpec
+          command: |
+            docker-compose exec app rspec --profile 10
+
+workflows:
+  version: 2.1
+  build:
+    jobs:
+      - test

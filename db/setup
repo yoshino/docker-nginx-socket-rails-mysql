@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -e
+
+echo -e '\n== Wait database =='
+while ! mysqladmin ping -h db --silent; do
+  sleep 1
+done
+
+echo -e '\n== Create databases =='
+bundle exec rake db:create
+
+echo -e '\n== Executing migration to development database =='
+bundle exec rails db:migrate
+
+echo -e '\n== Executing migration to test database =='
+RAILS_ENV=test bundle exec rails db:migrate
