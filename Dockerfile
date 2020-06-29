@@ -19,6 +19,7 @@ ADD Gemfile $APP_ROOT
 ADD Gemfile.lock $APP_ROOT
 
 RUN bundle install
+RUN yarn
 
 ADD . $APP_ROOT
 
