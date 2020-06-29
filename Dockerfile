@@ -23,6 +23,7 @@ RUN yarn
 
 ADD . $APP_ROOT
 
-RUN RAILS_ENV=production bundle exec rails assets:precompile
+# ref: https://github.com/rails/rails/issues/32947
+RUN SECRET_KEY_BASE=`rake secret` RAILS_ENV=production bundle exec rails assets:precompile
 EXPOSE  3000
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
