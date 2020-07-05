@@ -8,18 +8,38 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./docker/mysql/volumes:/var/lib/mysql
+      - db-data:/var/lib/mysql
     command: mysqld --default-authentication-plugin=mysql_native_password
 
   app:
     build:
-      context: .
+      context: containers/rails
       dockerfile: Dockerfile.dev
     tty: true
     stdin_open: true
+    command: bundle exec puma -C config/puma.rb
     volumes:
-      - '.:/app'
-    ports:
-      - '3000:3000'
+      - .:/app
+      - public-data:/app/public
+      - tmp-data:/app/tmp
+      - log-data:/app/log
+      - db-data:/var/lib/mysql
     depends_on:
       - db
+
+  web:
+    build:
+      context: containers/nginx
+    volumes:
+      - public-data:/app/public
+      - tmp-data:/app/tmp
+    ports:
+      - 8080:8080
+    depends_on:
+      - app
+
+volumes:
+  public-data:
+  tmp-data:
+  log-data:
+  db-data:

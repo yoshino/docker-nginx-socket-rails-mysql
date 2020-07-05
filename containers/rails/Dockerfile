@@ -3,7 +3,6 @@ FROM ruby:2.7.1-buster
 ENV DEBCONF_NOWARNINGS yes
 ENV TZ='Asia/Tokyo'
 ENV LANG C.UTF-8
-ENV PORT=3000
 
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1  apt-key add -
@@ -23,5 +22,8 @@ RUN yarn
 
 ADD . $APP_ROOT
 
-EXPOSE  3000
-CMD ["rails", "server", "-b", "0.0.0.0"]
+# ref: https://github.com/rails/rails/issues/32947
+RUN SECRET_KEY_BASE=`rake secret` RAILS_ENV=production bundle exec rails assets:precompile
+
+# puma.sockを配置するディレクトリを作成
+RUN mkdir -p tmp/sockets

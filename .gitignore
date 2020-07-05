@@ -37,3 +37,6 @@ yarn-debug.log*
 
 # docker
 docker/
+
+# env
+.env
