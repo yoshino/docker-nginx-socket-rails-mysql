@@ -1,0 +1,15 @@
+#!/bin/bash
+
+export REPOSITORY_NAME=app
+
+echo 'Create Rails Repository for ECR'
+aws --profile yoshino ecr create-repository --repository-name ${REPOSITORY_NAME}
+aws --profile yoshino ecr describe-repositories --query 'repositories[].repositoryName'
+
+echo 'Build Rails Image in ECR'
+export ECR_URI_APP=$(aws --profile yoshino ecr describe-repositories --repository-names ${REPOSITORY_NAME} --query 'repositories[0].repositoryUri' --output text)
+docker build -f ./containers/nginx/Dockerfile -t ${ECR_URI_APP} .
+
+echo 'Push Nginx Image'
+aws --profile yoshino ecr get-login-password | docker login --username AWS --password-stdin ${AWS_ECR_PATH}
+docker push ${ECR_URI_APP}
