@@ -10,8 +10,8 @@ aws --profile ${PROFILE} ecr describe-repositories --query 'repositories[].repos
 
 echo 'Build Rails Image in ECR'
 export ECR_URI_APP=$(aws --profile ${PROFILE} ecr describe-repositories --repository-names ${REPOSITORY_NAME} --query 'repositories[0].repositoryUri' --output text)
-docker build -f ./containers/nginx/Dockerfile -t ${ECR_URI_APP}:${IMAGE_TAG} .
+docker build -f ./containers/rails/Dockerfile -t ${ECR_URI_APP}:${IMAGE_TAG} .
 
-echo 'Push Nginx Image'
+echo 'Push Rails Image'
 aws --profile ${PROFILE} ecr get-login-password | docker login --username AWS --password-stdin ${AWS_ECR_PATH}
 docker push ${ECR_URI_APP}
