@@ -50,5 +50,6 @@ test:
 production:
   <<: *default
   database: docker_rails_mysql_production
-  username: docker_rails_mysql
-  password: <%= ENV['DOCKER_RAILS_MYSQL_DATABASE_PASSWORD'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
