@@ -1,13 +1,16 @@
 # README
 
-## セットアップ
+## アプリケーションのセットアップ
+
 ```
-$ dockercompose up
+$ docker-compose run app bundle exec rails db:setup
+$ docker-compose up
 ```
 
 ## ECRのセットアップ
-### AWSの設定
+terraformの構成としては[terraform-rails-mysql-pattern](https://github.com/yoshino/terraform-rails-mysql-pattern)を想定している。
 
+### AWSの設定
 ```
 $ aws configure
 ```
@@ -17,7 +20,7 @@ $ aws configure
 export AWS_ECR_PATH=<your_account_id>.dkr.ecr.ap-northeast-1.amazonaws.com
 ```
 
-### containerの更新
+### ECRの更新
 
 ```
 $ ./bin/setup_ecr_rails
